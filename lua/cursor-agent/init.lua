@@ -68,7 +68,7 @@ function M.ask(opts)
 
   local root = util.get_project_root()
   local ui_config = cfg.ui or {}
-  termui.open_float_term({
+  local bufnr, win, job_id = termui.open_float_term({
     argv = argv,
     title = title,
     border = ui_config.border or 'rounded',
@@ -76,11 +76,20 @@ function M.ask(opts)
     height = ui_config.height or 0.6,
     cwd = root,
     on_exit = function(code)
+      -- Clear stored job id when it exits
+      if M._term_state then M._term_state.job_id = nil end
       if code ~= 0 then
         util.notify(('cursor-agent exited with code %d'):format(code), vim.log.levels.WARN)
       end
     end,
   })
+
+  -- Store the terminal state so toggle_terminal can reopen this chat
+  M._term_state.bufnr = bufnr
+  M._term_state.win = win
+  M._term_state.job_id = job_id
+
+  return bufnr, win
 end
 
 -- Toggle a long-lived cursor-agent terminal at project root
