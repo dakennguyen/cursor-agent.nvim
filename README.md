@@ -1,4 +1,4 @@
-## Cursor Agent Neovim Plugin 
+## Cursor Agent Neovim Plugin
 
 A minimal Neovim plugin to run the Cursor Agent CLI inside a centered floating terminal. Toggle an interactive terminal at your project root, or send the current buffer or a visual selection to Cursor Agent.
 
@@ -78,6 +78,12 @@ require("cursor-agent").setup({
   timeout_ms = 60000,
   -- Auto-scroll behavior for certain UI helpers
   auto_scroll = true,
+  -- UI configuration for floating terminals
+  ui = {
+    border = 'rounded', -- Border style: 'rounded', 'single', 'double', 'none', etc.
+    width = 0.6,        -- Width as fraction of screen (0.0 to 1.0)
+    height = 0.6,       -- Height as fraction of screen (0.0 to 1.0)
+  },
 })
 ```
 

@@ -13,6 +13,12 @@ local default_config = {
   timeout_ms = 60000,
   -- Auto-scroll output buffer to the end as new content arrives
   auto_scroll = true,
+  -- UI configuration for floating terminals
+  ui = {
+    border = 'rounded',
+    width = 0.6,
+    height = 0.6,
+  },
 }
 
 local active_config = vim.deepcopy(default_config)

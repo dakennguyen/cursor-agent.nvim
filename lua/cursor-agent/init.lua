@@ -67,12 +67,13 @@ function M.ask(opts)
   end
 
   local root = util.get_project_root()
+  local ui_config = cfg.ui or {}
   termui.open_float_term({
     argv = argv,
     title = title,
-    border = 'rounded',
-    width = 0.6,
-    height = 0.6,
+    border = ui_config.border or 'rounded',
+    width = ui_config.width or 0.6,
+    height = ui_config.height or 0.6,
     cwd = root,
     on_exit = function(code)
       if code ~= 0 then
@@ -102,27 +103,28 @@ function M.toggle_terminal()
     return res[1] == -1
   end
 
+  local cfg = config.get()
+  local ui_config = cfg.ui or {}
   -- If we have a valid buffer with a live job, just reopen a window for it
   if st.bufnr and vim.api.nvim_buf_is_valid(st.bufnr) and job_is_alive(st.job_id) then
     st.win = termui.open_float_win_for_buf(st.bufnr, {
       title = 'Cursor Agent',
-      border = 'rounded',
-      width = 0.6,
-      height = 0.6,
+      border = ui_config.border or 'rounded',
+      width = ui_config.width or 0.6,
+      height = ui_config.height or 0.6,
     })
     return st.bufnr, st.win
   end
 
   -- Otherwise spawn a fresh terminal
-  local cfg = config.get()
   local argv = util.concat_argv(util.to_argv(cfg.cmd), cfg.args)
   local root = util.get_project_root()
   local bufnr, win, job_id = termui.open_float_term({
     argv = argv,
     title = 'Cursor Agent',
-    border = 'rounded',
-    width = 0.6,
-    height = 0.6,
+    border = ui_config.border or 'rounded',
+    width = ui_config.width or 0.6,
+    height = ui_config.height or 0.6,
     cwd = root,
     on_exit = function(code)
       -- Clear stored job id when it exits
